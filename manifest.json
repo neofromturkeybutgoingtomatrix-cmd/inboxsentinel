@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "InboxSentinel — Gmail Subscription Auditor",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Audit your subscriptions, mass unsubscribe, zero server. No OAuth — reads DOM only.",
   "permissions": ["storage"],
   "host_permissions": ["https://mail.google.com/*"],
@@ -25,5 +25,8 @@
       "js": ["content-script.js"],
       "run_at": "document_end"
     }
-  ]
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; img-src 'self' https://www.google.com https://t0.gstatic.com https://t1.gstatic.com https://t2.gstatic.com https://t3.gstatic.com"
+  }
 }

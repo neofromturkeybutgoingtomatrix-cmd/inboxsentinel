@@ -1,5 +1,5 @@
 /**
- * InboxSentinel v0.2 — Redesigned popup logic
+ * InboxSentinel v0.2.0 — Redesigned popup logic
  * Clean cards, visual engagement bars, smart sender categorization.
  */
 
@@ -94,11 +94,14 @@ function render(data) {
     const d = domain.toLowerCase();
     const e = (s.email || '').split('@')[1] || '';
     const isTx = TRANSACTIONAL_DOMAINS.some(t => d.includes(t) || e.includes(t));
-    const favicon = `https://www.google.com/s2/favicons?domain=${esc(domain)}&sz=64`;
+    const favicon = `https://www.google.com/s2/favicons?domain=${esc(domain)}&sz=32`;
 
     return `
       <div class="card" data-sender="${esc(s.sender)}">
-        <div class="avatar ${avClass}" style="background-image:url('${favicon}')">${initials}</div>
+        <div class="avatar ${avClass}">
+          <img src="${favicon}" onerror="this.style.display='none'" style="width:20px;height:20px;object-fit:contain">
+          <span class="av-text">${initials}</span>
+        </div>
         <div class="info">
           <div class="name">${esc(s.sender || domain)}</div>
           <div class="domain">${esc(domain)}</div>
@@ -115,16 +118,18 @@ function render(data) {
       </div>`;
   }).join('');
 
-  // Favicon fallback: if image fails, show initials
-  list.querySelectorAll('.avatar').forEach(av => {
-    const img = new Image();
-    img.onerror = () => { av.style.backgroundImage = 'none'; };
-    img.src = av.style.backgroundImage.replace(/url\(['"]?(.+?)['"]?\)/, '$1');
-  });
   list.querySelectorAll('.tag-unsub').forEach(tag => {
     tag.addEventListener('click', (e) => {
       e.stopPropagation();
       unsubSender(tag.dataset.sender);
+    });
+  });
+
+  // Show initials when favicon fails to load
+  list.querySelectorAll('.avatar img').forEach(img => {
+    img.addEventListener('error', function() {
+      this.style.display = 'none';
+      this.parentElement.querySelector('.av-text').style.display = '';
     });
   });
 }

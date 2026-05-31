@@ -1,5 +1,5 @@
 /**
- * InboxSentinel v0.1.1 — Simple & works
+ * InboxSentinel v0.2.0 — Simple & works
  * Scans inbox, suggests newsletters, redirects to unsubscribe page.
  */
 
